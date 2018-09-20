@@ -1,15 +1,7 @@
 /*
- * Available context bindings:
- *   COLUMNS     List<DataColumn>
- *   ROWS        Iterable<DataRow>
- *   OUT         { append() }
- *   FORMATTER   { format(row, col); formatValue(Object, col) }
- *   TRANSPOSED  Boolean
- * plus ALL_COLUMNS, TABLE, DIALECT
- *
- * where:
- *   DataRow     { rowNumber(); first(); last(); data(): List<Object>; value(column): Object }
- *   DataColumn  { columnNumber(), name() }
+ * Available settings:
+ *   PRINT_COMMENT     {true, false} controls whether to print comment
+ *   INDENT        ....space indentation size, default to 2 spaces
  */
 
 import static com.intellij.openapi.util.text.StringUtil.escapeStringCharacters as escapeStr
