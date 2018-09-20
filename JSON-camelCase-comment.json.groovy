@@ -2,6 +2,9 @@
  * Available settings:
  *   PRINT_COMMENT     {true, false} controls whether to print comment
  *   INDENT        ....space indentation size, default to 2 spaces
+ *
+ * Note:
+ *   PRINT_COMMENT feature is not available for multi-table selects
  */
 
 import static com.intellij.openapi.util.text.StringUtil.escapeStringCharacters as escapeStr
