@@ -2,7 +2,7 @@
  * Available settings:
  *   PRINT_COMMENT         { true, false } controls whether to print comment
  *   PRINT_ALL_COMMENTS    { true, false } whether to print all comments
- *   INDENT        ....    space indentation size, default to 2 spaces
+ *   INDENT                space indentation size, default to 2 spaces
  *
  * Note:
  *   PRINT_COMMENT feature is not available for multi-table selects
