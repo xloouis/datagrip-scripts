@@ -39,20 +39,21 @@ def printJSON(level, col, o) {
         case String: OUT.append("\"${escapeStr(o)}\""); break
         case Tuple: printJSON(level, o[0], o[1]); break
         case Map:
-            OUT.append("{")
+            OUT.append("{${NEWLINE}")
             def es = o.entrySet()
+            def esSize = es.size()
             es.eachWithIndex { entry, i ->
-                OUT.append("${i > 0 ? "," : ""}")
-                def lastEntry = (Map.Entry<String, Integer>) es.toArray()[i - 1]
-                if (PRINT_COMMENT && i > 0 && COL_COMMENTS[lastEntry.getKey().toString()]) {
-                    OUT.append(" // ${lastEntry.getKey().toString()}: ${COL_COMMENTS[lastEntry.getKey().toString()]}")
-                }
-                OUT.append("$NEWLINE${INDENT * (level + 1)}")
+                OUT.append("${INDENT * (level + 1)}")
                 OUT.append("\"${escapeStr(javaName(entry.getKey().toString(), false))}\"")
                 OUT.append(": ")
                 printJSON(level + 1, null, entry.getValue())
+                OUT.append("${i < esSize - 1 ? "," : ""}")
+                if (PRINT_COMMENT && COL_COMMENTS[entry.getKey().toString()]) {
+                    OUT.append(" // ${entry.getKey().toString()}: ${COL_COMMENTS[entry.getKey().toString()]}")
+                }
+                OUT.append(NEWLINE)
             }
-            OUT.append("$NEWLINE${INDENT * level}}")
+            OUT.append("${INDENT * level}}")
             break
         case Object[]:
         case Iterable:
