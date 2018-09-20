@@ -1,7 +1,8 @@
 /*
  * Available settings:
- *   PRINT_COMMENT     {true, false} controls whether to print comment
- *   INDENT        ....space indentation size, default to 2 spaces
+ *   PRINT_COMMENT         { true, false } controls whether to print comment
+ *   PRINT_ALL_COMMENTS    { true, false } whether to print all comments
+ *   INDENT        ....    space indentation size, default to 2 spaces
  *
  * Note:
  *   PRINT_COMMENT feature is not available for multi-table selects
@@ -11,19 +12,25 @@ import static com.intellij.openapi.util.text.StringUtil.escapeStringCharacters a
 import com.intellij.database.util.Case
 
 PRINT_COMMENT = true
+PRINT_ALL_COMMENTS = false
 NEWLINE = System.getProperty("line.separator")
 INDENT = "  "
 
-COL_COMMENTS = new HashMap()
+COL_COMMENTS = new LinkedHashMap<String, String>()
 if (TABLE != null) {
     TABLE.getDasChildren(com.intellij.database.model.ObjectKind.COLUMN).each { column ->
         COL_COMMENTS.put(column.getName(), column.getComment())
-        OUT.append(javaName(column.getName(), false) + ": " + column.getComment() + NEWLINE)
     }
-    OUT.append(NEWLINE)
 } else {
     PRINT_COMMENT = false
     OUT.append("`print comment` feature is not available for multi-table selects due to Intellij's SDK limitations!$NEWLINE$NEWLINE")
+}
+
+if (PRINT_ALL_COMMENTS && TABLE != null) {
+    COL_COMMENTS.entrySet().each { column ->
+        OUT.append(javaName(column.getKey(), false) + ": " + column.getValue() + NEWLINE)
+    }
+    OUT.append(NEWLINE)
 }
 
 def printJSON(level, col, o) {
