@@ -23,8 +23,9 @@ COL_COMMENTS = new HashMap()
 if (TABLE != null) {
     TABLE.getDasChildren(com.intellij.database.model.ObjectKind.COLUMN).each { column ->
         COL_COMMENTS.put(column.getName(), column.getComment())
-        OUT.append(column.getName() + ": " + column.getComment() + NEWLINE)
+        OUT.append(javaName(column.getName(), false) + ": " + column.getComment() + NEWLINE)
     }
+    OUT.append(NEWLINE)
 } else {
     PRINT_COMMENT = false
     OUT.append("`print comment` feature is not available for multi-table selects due to Intellij's SDK limitations!$NEWLINE$NEWLINE")
@@ -39,10 +40,12 @@ def printJSON(level, col, o) {
         case Tuple: printJSON(level, o[0], o[1]); break
         case Map:
             OUT.append("{")
-            o.entrySet().eachWithIndex { entry, i ->
+            def es = o.entrySet()
+            es.eachWithIndex { entry, i ->
                 OUT.append("${i > 0 ? "," : ""}")
-                if (PRINT_COMMENT && i > 0 && COL_COMMENTS[entry.getKey().toString()]) {
-                    OUT.append(" // ${entry.getKey().toString()}: ${COL_COMMENTS[entry.getKey().toString()]}")
+                def lastEntry = (Map.Entry<String, Integer>) es.toArray()[i - 1]
+                if (PRINT_COMMENT && i > 0 && COL_COMMENTS[lastEntry.getKey().toString()]) {
+                    OUT.append(" // ${lastEntry.getKey().toString()}: ${COL_COMMENTS[lastEntry.getKey().toString()]}")
                 }
                 OUT.append("$NEWLINE${INDENT * (level + 1)}")
                 OUT.append("\"${escapeStr(javaName(entry.getKey().toString(), false))}\"")
